@@ -13,6 +13,8 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json())
 app.use("/api/jobs", require("./routes/jobRoutes"))
+app.use("/api/auth", require("./routes/authRoutes"))
+app.use("/api/users", require("./routes/userRoutes"))
 app.use(errorHandler)
 app.listen(port, () => {
     console.log(`Job-Listing-System listening at http://localhost:${port}`)
