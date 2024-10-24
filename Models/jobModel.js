@@ -5,83 +5,61 @@ const { use, options } = require('../routes/jobRoutes')
 
 
 
+const sectorSchema = new mongoose.Schema({
+    name : {
+        type : String,
+        required : [true , 'Please provide name'],
+    },
+    description : {
+        type : String,
+        required : [true , 'Please provide description'],
+    }
+})
 
-// const skillSchema = new mongoose.Schema({
-//     title : {
-//         type : String,
-//         required : [true , 'Please provide skill'],
-//     },
-//     description : {
-//         type : String,
-//         required : [true , 'Please provide description'],
-//     }
-// })
+const jobSchema = new mongoose.Schema({
+    company : {
+        type : String,
+        required : [true , 'Please provide company'],
+    },
+    title : {
+        type : String,
+        required : [true , 'Please provide title'],
+    },
+    description : {
+        type : String,
+        required : [true , 'Please provide description'],
+    },
+    vacancy : {
+        type : Number,
+        required : [true , 'Please provide vacancy'],
+    },
+    experience : {
+        type : String,
+        required : [true , 'Please provide experience'],
+    },
+    skills: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Skill'
+    }],
+    sector : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Sector',
+        required : [true , 'Please provide sector'],
+    },
+    position : {
+        type : String,
+        required : [true , 'Please provide position'],
+    },
+    status : {
+        type : String,
+        enum : ['interview' , 'declined' , 'pending'],
+        default : 'pending',
+    },
+    createdBy : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User',
+        required : [true , 'Please provide user'],
+    }
+})
 
-// const candidateSchema = new mongoose.Schema({
-//     skill : {
-//         type : [skillSchema],
-//         required : [true , 'Please provide skill'],
-//     },
-//     user : {
-//         type : userSchema,
-//         required : [true , 'Please provide user'],
-//     }
-// })
-    
-
-// const educationSchema = new mongoose.Schema({
-//     institution_name : {
-//         type : String,
-//         required : [true , 'Please provide institution_name'],
-//     },
-//     degree : {
-//         type : String,
-//         options : ['SSC' , 'HSC' , 'BCS' , 'BS' , 'MS' , 'Mphil' , 'PhD'],
-//         required : [true , 'Please provide degree'],
-//     },
-//     field_of_study : {
-//         type : String,
-//         required : [true , 'Please provide field of study'],
-//     },
-//     from : {
-//         type : Date,
-//         required : [true , 'Please provide from'],
-//     },
-//     to : {
-//         type : Date,
-//         required : [true , 'Please provide to'],
-//     },
-//     grade : {
-//         type : String,
-//         required : [true , 'Please provide grade'],
-//     },
-//     description : {
-//         type : String,
-//         required : [true , 'Please provide description'],
-//     }
-// })
-
-// const experienceSchema = new mongoose.Schema({
-//     company_name : {
-//         type : String,
-//         required : [true , 'Please provide company name'],      
-//     },
-//     position : {
-//         type : String,  
-//         required : [true , 'Please provide position'],
-//     },
-//     from : {    
-//         type : Date,
-//         required : [true , 'Please provide from'],
-//     },
-//     to : {
-//         type : Date,
-//         required : [true , 'Please provide to'],
-//     },
-//     description : {
-//         type : String,
-//         required : [true , 'Please provide description'],
-//     }
-// })
-    
-    
+module.exports = mongoose.model('Job' , jobSchema)
