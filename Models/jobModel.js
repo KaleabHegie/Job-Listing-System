@@ -5,16 +5,7 @@ const { use, options } = require('../routes/jobRoutes')
 
 
 
-const sectorSchema = new mongoose.Schema({
-    name : {
-        type : String,
-        required : [true , 'Please provide name'],
-    },
-    description : {
-        type : String,
-        required : [true , 'Please provide description'],
-    }
-})
+
 
 const jobSchema = new mongoose.Schema({
     company : {

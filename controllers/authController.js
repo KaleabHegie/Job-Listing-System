@@ -20,7 +20,8 @@ const login = asyncHandler(async (req, res) => {
                 user: {
                     username: user.user_name, // Use `user_name` to match your schema
                     email: user.email,
-                    id: user._id
+                    id: user._id,
+                    role : user.role
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -29,17 +30,12 @@ const login = asyncHandler(async (req, res) => {
             }
         )
 
-        // Respond with the token (or other necessary data)
         res.status(200).json({ accessToken })
     } else {
         res.status(401)
         throw new Error('Invalid email or password')
     }
 })
-
-
-
-
 
 const currentUser = asyncHandler(async (req, res) => {
     res.status(200).json(req.user)

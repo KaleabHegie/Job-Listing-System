@@ -1,24 +1,28 @@
-const asyncHandler = require('express-async-handler')
-const Users = require('../Models/userModel')
-const bcrypt = require('bcrypt')
+const asyncHandler = require('express-async-handler');
+const Users = require('../Models/userModel');
+const bcrypt = require('bcrypt');
 
 
-//@desc Create a user
-//@route POST /api/users
+
+//@desc register  users
+//@route register /api/users/register_user
 //@access Public
-const register = asyncHandler( async (req, res) => {
-    const {first_name , last_name , user_name , date_of_birth , email , phone , address , city , country , password , photo} = req.body
-    if (!first_name || !last_name || !user_name || !date_of_birth || !email || !phone) {
-        res.status(400)
-        throw new Error('Please provide first name , last name , user name , date of birth , email , phone')
-    }
-    const userAvailable = await Users.findOne({email})
-    if (userAvailable) {
-        res.status(400)
-        throw new Error('User already exist')
+const registerUser = asyncHandler(async (req, res) => {
+    const { first_name, last_name, user_name, date_of_birth, email, phone, address, city, country, password, photo , role } = req.body;
+
+    if (!first_name || !last_name || !user_name || !date_of_birth || !email || !phone || !password || !photo) {
+        res.status(400);
+        throw new Error('Please provide all required fields');
     }
 
-    const hashPassword = await bcrypt.hash(password, 10)
+    const userAvailable = await Users.findOne({ email });
+    if (userAvailable) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const user = await Users.create({
         first_name,
         last_name,
@@ -29,11 +33,13 @@ const register = asyncHandler( async (req, res) => {
         address,
         city,
         country,
-        password : hashPassword,
+        password: hashPassword,
         photo,
-    })
-    res.status(200).json(user)
-})
+        role
+    });
+
+    res.status(201).json(user);  // Using 201 for successful resource creation
+});
 
 
 
@@ -105,11 +111,24 @@ const deleteUser = asyncHandler( async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {  
     getAllUsers,
     getSingleUser,
     updateUser,
     deleteUser,
-    register
+    registerUser
 
 }

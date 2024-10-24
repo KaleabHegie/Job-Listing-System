@@ -24,6 +24,19 @@ const validateToken = asyncHandler(async (req, res, next) => {
 
 
 
+const validateAdmin = asyncHandler((req, res, next) => {
+    validateToken(req, res, () => {
+        
+        if (req.user.role === 'admin') {
+            next()  
+        } else {
+            res.status(403)
+            throw new Error('Forbidden: You do not have access to this resource')
+        }
+    })
+})
+
+
 const validateCompanyAdmin = asyncHandler((req, res, next) => {
     validateToken(req, res, () => {
         if (req.user.role === 'companyAdmin') {
@@ -50,5 +63,6 @@ const validateCandidate = asyncHandler((req, res, next) => {
 module.exports = {
     validateToken,  
     validateCompanyAdmin,  
-    validateCandidate  
+    validateCandidate  ,
+    validateAdmin
 }

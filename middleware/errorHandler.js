@@ -1,37 +1,43 @@
-const {constants} = require('../constants')
+const { constants } = require('../constants');
+
 const errorHandler = (err, req, res, next) => {
-    const statusCode = res.statusCode ? res.statusCode : 500
-    switch(statusCode){
+    console.error(err); // Log the error for debugging
+    const statusCode = res.statusCode ? res.statusCode : constants.SERVER_ERROR;
+
+    switch (statusCode) {
         case constants.VALIDATION_ERRORS:
-            res.json({
-                message : 'Not Found'
-            })
-            break
+            res.status(constants.VALIDATION_ERRORS).json({
+                message: 'Validation Error',
+                details: err.message || 'Invalid data provided.'
+            });
+            break;
         case constants.NOT_FOUND:
-            res.json({
-                message : 'Bad Request'
-            })
-            break
+            res.status(constants.NOT_FOUND).json({
+                message: 'Not Found'
+            });
+            break;
         case constants.SERVER_ERROR:
-            res.json({
-                message : 'Internal Server Error'
-            })  
-            break
+            res.status(constants.SERVER_ERROR).json({
+                message: 'Internal Server Error',
+                details: err.message // Include error message
+            });
+            break;
         case constants.FORBIDDEN:
-            res.json({
-                message : 'Forbidden'
-            })
-            break     
+            res.status(constants.FORBIDDEN).json({
+                message: 'Forbidden'
+            });
+            break;     
         case constants.UNAUTHORIZED:
-            res.json({
-                message : 'Unauthorized'
-        })   
+            res.status(constants.UNAUTHORIZED).json({
+                message: 'Unauthorized'
+            });
+            break; 
         default:
-            res.json({
-                message : 'Internal Server Error'
-            })
-    }    
-}
+            res.status(constants.SERVER_ERROR).json({
+                message: 'An unexpected error occurred',
+                details: err.message // Include error message
+            });
+    }
+};
 
-
-module.exports = {errorHandler}
+module.exports = { errorHandler };
