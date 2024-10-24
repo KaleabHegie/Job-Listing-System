@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler')
 const Users = require('../models/userModel')
 const Company = require('../models/companyModel'); 
+const Candidate = require('../models/candidateModel');
+const Recruiter = require('../models/recruiterModel')
 
 
 
@@ -66,6 +68,12 @@ const registerCompany = asyncHandler(async (req, res) => {
     await Users.updateMany(
         { _id: { $in: recruiters } }, // Find users whose IDs are in the recruiters array
         { $set: { role: 'companyAdmin' } } // Set their role to companyAdmin
+    );
+
+    await Candidate.deleteMany({ user_id: { $in: recruiters } });
+
+    await Recruiter.insertMany(
+        recruiters.map(userId => ({ user_id: userId, company_id: savedCompany._id }))
     );
 
     // Respond with the created company details (excluding sensitive information)

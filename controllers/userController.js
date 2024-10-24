@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Users = require('../models/userModel');
+const Candidate = require('../models/candidateModel');
 const bcrypt = require('bcrypt');
 
 
@@ -38,97 +39,17 @@ const registerUser = asyncHandler(async (req, res) => {
         role
     });
 
+    if (user.role === 'candidate' ) {
+        await Candidate.create({
+            user_id: user._id,
+            skill: []  // Assuming no skills provided during registration; can be updated later
+        });
+    }
+
     res.status(201).json(user);  // Using 201 for successful resource creation
 });
 
 
-
-//@desc Get all users
-//@route GET /api/users
-//@access Public
-const getAllUsers = asyncHandler( async (req, res) => {
-    const users = await Users.find()
-    res.status(200).json(users)
-})
-
-
-
-
-
-//@desc Get a single user
-//@route GET /api/users/:id
-//@access Public
-const getSingleUser = asyncHandler( async (req, res) => {
-    const user = await Users.findById(req.params.id)
-    if (!user) {
-        res.status(400)
-        throw new Error('User not found')
-    }
-    res.status(200).json(user)
-})
-
-
-
-
-//@desc Update a user
-//@route PUT /api/users/:id
-//@access Public
-const updateUser = asyncHandler( async (req, res) => {
-    
-    const user = await Users.findById(req.params.id)
-    if (!user) {
-        res.status(400)
-        throw new Error('User not found')
-    }
-    
-    const updatedUser = await Users.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
-    })
-    
-    
-    res.status(200).json(updatedUser)
-})
-
-
-
-
-//@desc Delete a user
-//@route DELETE /api/users/:id
-//@access Public
-const deleteUser = asyncHandler( async (req, res) => {    
-    const user = await Users.findById(req.params.id)
-    if (!user) {
-        res.status(400)
-        throw new Error('User not found')
-    }
-    
-    await user.deleteOne()
-    res.status(200).json(user)
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = {  
-    getAllUsers,
-    getSingleUser,
-    updateUser,
-    deleteUser,
     registerUser
-
 }

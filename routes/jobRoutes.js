@@ -1,18 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const {getAllJobs , createJob , updateJob , deleteJob , getSingleJob } = require('../controllers/jobController');
-const { validateAdmin } = require('../middleware/validateTokenHandler');
+const {getAllJobs , createJob , updateJob , deleteJob , getSingleJob, searchJobs } = require('../controllers/jobController');
+const { validateAdmin, validateCompanyAdmin } = require('../middleware/validateTokenHandler');
 
 
-router.route('/all_jobs').get(validateAdmin, getAllJobs);
 
-router.route('/create_job').post(createJob)
+router.route('/').get(searchJobs);
 
-router.route('/get_single_job/:id').get(getSingleJob)
+router.route('/all_jobs').get(getAllJobs);
 
-router.route('/update_job/:id').put(updateJob)
+router.route('/create_job').post(validateCompanyAdmin , createJob)
 
-router.route('/delete_job/:id').delete(deleteJob)
+router.route('/single_job/:id').get(getSingleJob)
+
+router.route('/update_job/:id').post(validateCompanyAdmin,updateJob)
+
+router.route('/delete_job/:id').delete(validateCompanyAdmin , deleteJob)
 
 
 
