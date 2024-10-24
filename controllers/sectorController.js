@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const Sector = require('../Models/sectorModel');
+const Sector = require('../models/sectorModel');
 
 // Admin only
 //@desc Create a new sector

@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const Skills = require('../Models/skillModel');
+const Skills = require('../models/skillModel');
 
 // Admin only
 //@desc Create a new skill

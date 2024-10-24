@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
-const Jobs = require('../Models/jobModel');
-const Users = require('../Models/userModel');
+const Jobs = require('../models/jobModel');
+const Users = require('../models/userModel');
 
 //@desc Get all jobs
 //@route GET /api/jobs
