@@ -17,6 +17,7 @@ const createSector = asyncHandler(async (req, res) => {
     });
     const savedSector = await newSector.save();
     res.status(201).json({
+        message: 'Sector created successfully',
         id: savedSector._id,
         name: savedSector.name,
         description: savedSector.description,

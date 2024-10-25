@@ -2,10 +2,26 @@ const asyncHandler = require('express-async-handler');
 const Application = require('../models/applicationModel');
 const Jobs = require('../models/jobModel');
 const Candidates = require('../models/candidateModel');
+const {check , validationResult} = require('express-validator')
 
 // Create a new application
-const createApplication = asyncHandler(async (req, res) => {
+const createApplication = [
+    check('job_id')
+    .notEmpty()
+    .withMessage('Please provide a job ID'),
+    check('coverLetter')
+    .optional()
+    .isLength({min : 10})
+    .withMessage('Please provide a cover letter'),
+    asyncHandler(async (req, res) => {
     const user_id = req.user.id
+
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const {  job_id, coverLetter } = req.body;
 
     const job = await Jobs.findById(job_id);
@@ -26,7 +42,7 @@ const createApplication = asyncHandler(async (req, res) => {
     });
 
     res.status(201).json(application);
-});
+})]
 
 
 const getApplication = asyncHandler(async (req, res) => {
@@ -37,9 +53,18 @@ const getApplication = asyncHandler(async (req, res) => {
 });
 
 // Update application status
-const updateApplicationStatus = asyncHandler(async (req, res) => {
+const updateApplicationStatus = [
+    check('status')
+    .notEmpty()
+    .isIn(['pending', 'accepted', 'rejected'])
+    .withMessage('Please provide a status'),
+    
+    asyncHandler(async (req, res) => {
+    
     const { id } = req.params;
     const { status } = req.body;
+
+    
 
     const application = await Application.findByIdAndUpdate(id, { status }, { new: true });
 
@@ -48,7 +73,7 @@ const updateApplicationStatus = asyncHandler(async (req, res) => {
     }
 
     res.status(200).json(application);
-});
+})]
 
 // Delete an application
 const deleteApplication = asyncHandler(async (req, res) => {

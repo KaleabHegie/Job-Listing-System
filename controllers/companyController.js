@@ -78,6 +78,7 @@ const registerCompany = asyncHandler(async (req, res) => {
 
     // Respond with the created company details (excluding sensitive information)
     res.status(201).json({
+        message : 'Company registered successfully',
         id: savedCompany._id,
         name: savedCompany.name,
         email: savedCompany.email,
@@ -86,7 +87,47 @@ const registerCompany = asyncHandler(async (req, res) => {
     });
 });
 
+
+
+
+//@desc Update a company
+//@route PUT /api/company/:id
+//@access Private(company admin only)
+const updateCompanyProfile = asyncHandler( async (req, res) => {
+    
+    const userId = req.user.id; 
+
+    const recruiter = await Recruiter.findOne({ user_id: userId });
+    const { recruiterId } = recruiter._id;
+
+    const company_id = req.params.id;
+
+    console.log(company_id , recruiter.company_id.toString())
+    if (company_id !== recruiter.company_id.toString()) {
+        res.status(400)
+        throw new Error('You are not authorized to update this company')
+    }
+
+    
+    if (!recruiter) {
+        res.status(400)
+        throw new Error('User not found')
+    }
+    
+    const updateCompany = await Company.findByIdAndUpdate(company_id, req.body, {
+        new: true
+    })
+    
+    
+    res.status(200).json({
+        message : "Company Profile updated successfully",
+        data : updateCompany
+        
+})
+})
+
 module.exports = {
     registerCompany,
+    updateCompanyProfile
 };
 
