@@ -89,7 +89,7 @@ const deleteSector = asyncHandler(async (req, res) => {
         throw new Error('Sector not found');
     }
 
-    await sector.remove(); // This will delete the sector
+    await Sector.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
         message: 'Sector deleted successfully'

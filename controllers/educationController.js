@@ -138,7 +138,7 @@ const deleteEducation = asyncHandler(async (req, res) => {
         throw new Error('Education not found');
     }
 
-    await education.remove();
+    await Education.findByIdAndRemove(educationId);
 
     res.status(200).json({
         message: 'Education removed from candidate'

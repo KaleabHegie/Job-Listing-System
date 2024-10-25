@@ -135,7 +135,7 @@ const deleteExperience = asyncHandler(async (req, res) => {
         throw new Error('Experience not found');
     }
 
-    await experience.remove();
+    await Experience.findByIdAndDelete(experienceId);
 
     res.status(200).json({
         message: 'Experience removed from candidate'

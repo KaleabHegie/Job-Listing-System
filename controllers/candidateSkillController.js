@@ -121,7 +121,8 @@ const updateCandidateSkill = asyncHandler(async (req, res) => {
 // @route DELETE /api/candidates/:candidateId/skills/:skillId
 // @access Private (Admin only)
 const deleteCandidateSkill = asyncHandler(async (req, res) => {
-    const userId = req.user.id; 
+    const userId = req.user.id;
+    const { skillId } = req.params; 
 
     const candidate = await Candidate.findOne({ user_id: userId });
     const { candidateId } = candidate._id;

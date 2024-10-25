@@ -3,10 +3,6 @@ const mongoose = require('mongoose')
 const { use, options } = require('../routes/jobRoutes')
 
 
-
-
-
-
 const jobSchema = new mongoose.Schema({
     company : {
         type : String,

@@ -13,7 +13,7 @@ router.route('/create_job').post(validateCompanyAdmin , createJob)
 
 router.route('/single_job/:id').get(getSingleJob)
 
-router.route('/update_job/:id').post(validateCompanyAdmin,updateJob)
+router.route('/update_job/:id').put(validateCompanyAdmin,updateJob)
 
 router.route('/delete_job/:id').delete(validateCompanyAdmin , deleteJob)
 

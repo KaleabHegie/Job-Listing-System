@@ -132,7 +132,7 @@ const deletePersonalProject = asyncHandler(async (req, res) => {
         throw new Error('Personal project not found');
     }
 
-    await project.remove();
+    await Project.findByIdAndDelete(projectId);
 
     res.status(200).json({
         message: 'Personal project removed successfully'

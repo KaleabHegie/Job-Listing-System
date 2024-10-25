@@ -94,17 +94,6 @@ const createJob = asyncHandler(async (req, res) => {
 //@access Public
 const getSingleJob = asyncHandler(async (req, res) => {
     const jobId = req.params.id; 
-    const userId = req.user.id; 
-
-    const recruiter = await Recruiter.findOne({ user_id: userId });
-    
-
-    const isCompanyValid = recruiter.company_id == company;
-    if (!isCompanyValid) {
-        res.status(403);
-        throw new Error('You are not authorized to post a job for this company');
-    }
-
     const job = await Jobs.findById(jobId); // Fetch the job by its ID
    
 
@@ -127,20 +116,18 @@ const getSingleJob = asyncHandler(async (req, res) => {
     });
 });
 
+
+
 //@desc Update a job
 //@route PUT /api/jobs/:id
 //@access Public
 const updateJob = asyncHandler(async (req, res) => {
     const jobId = req.params.id; 
+    const userId = req.user.id
     const recruiter = await Recruiter.findOne({ user_id: userId });
     
 
-    const isCompanyValid = recruiter.company_id == company;
-    if (!isCompanyValid) {
-        res.status(403);
-        throw new Error('You are not authorized to post a job for this company');
-    }
-
+   
 
     const {
         company,
@@ -152,6 +139,12 @@ const updateJob = asyncHandler(async (req, res) => {
         sector,
         position
     } = req.body;
+
+    const isCompanyValid = recruiter.company_id == company;
+    if (!isCompanyValid) {
+        res.status(403);
+        throw new Error('You are not authorized to post a job for this company');
+    }
 
     // Check if job exists
     const job = await Jobs.findById(jobId);
@@ -192,23 +185,22 @@ const updateJob = asyncHandler(async (req, res) => {
 //@access Public
 const deleteJob = asyncHandler(async (req, res) => {
     const jobId = req.params.id; 
+    const userId = req.user.id
+    const job = await Jobs.findById(jobId);
     const recruiter = await Recruiter.findOne({ user_id: userId });
     
 
-    const isCompanyValid = recruiter.company_id == company;
+    const isCompanyValid = recruiter.id == job.createdBy.toString()
     if (!isCompanyValid) {
         res.status(403);
-        throw new Error('You are not authorized to post a job for this company');
+        throw new Error('You are not authorized to delete this job!');
     }
 
-    // Check if job exists
-    const job = await Jobs.findById(jobId);
     if (!job) {
         return res.status(404).json({ message: 'Job not found' }); // If no job is found, return a 404
     }
 
-    await job.remove(); // Remove the job from the database
-
+    await Jobs.findByIdAndDelete(jobId)
     res.status(200).json({ message: 'Job deleted successfully' });
 });
 

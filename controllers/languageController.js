@@ -128,7 +128,7 @@ const deleteLanguage = asyncHandler(async (req, res) => {
         throw new Error('Language not found');
     }
 
-    await language.remove();
+    await Language.findByIdAndDelete(languageId);
 
     res.status(200).json({
         message: 'Language removed from candidate'

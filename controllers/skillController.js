@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Skills = require('../models/skillModel');
+const { find, findById } = require('../models/jobModel');
 
 // Admin only
 //@desc Create a new skill
@@ -88,7 +89,7 @@ const deleteSkill = asyncHandler(async (req, res) => {
         throw new Error('Skill not found');
     }
 
-    await skill.remove(); // This will delete the skill
+    await Skills.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
         message: 'Skill deleted successfully'

@@ -8,7 +8,7 @@ const candidateSchema = new mongoose.Schema({
     },
     skill: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Skills',  // Reference the Skills model by its name in mongoose.model()
+        ref: 'Skills', 
         required: false
     }]
 }, { timestamps: true });

@@ -135,7 +135,7 @@ const deleteCertificate = asyncHandler(async (req, res) => {
         throw new Error('Certificate not found');
     }
 
-    await certificate.remove();
+    await Certificate.findByIdAndDelete(certificateId);
 
     res.status(200).json({
         message: 'Certificate removed from candidate',
